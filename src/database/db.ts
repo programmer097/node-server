@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = "mongodb://localhost:27017";
+const uri = `${process.env.MONGODB_URL}:${process.env.MONGODB_PORT}`;
 const client = new MongoClient(uri);
 
 async function run() {
@@ -15,3 +15,5 @@ async function run() {
 }
 
 run().catch(console.dir);
+
+module.exports = client;

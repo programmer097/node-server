@@ -3,11 +3,11 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route";
 
+dotenv.config();
+
 import "./database/db";
 import "./database/postgresdb";
-import "./database/redis";
-
-dotenv.config();
+const RedisClient = require("./database/redis");
 
 // Create an Express application
 const app = express();
@@ -21,6 +21,7 @@ app.use("/auth", authRoutes);
 // Define a route for the root path ('/')
 app.get("/", (req: Request, res: Response) => {
   // Send a response to the client
+  RedisClient.set("get", "Hello, TypeScript + Node.js + Express!");
   res.send("Hello, TypeScript + Node.js + Express!");
 });
 
