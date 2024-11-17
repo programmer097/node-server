@@ -5,8 +5,8 @@ import authRoutes from "./routes/auth.route";
 
 dotenv.config();
 
-import "./database/db";
-import "./database/postgresdb";
+const { mongoClient } = require("./database/mongodb");
+const PostresClient = require("./database/postgresdb");
 const RedisClient = require("./database/redis");
 
 // Create an Express application
@@ -19,9 +19,17 @@ app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 
 // Define a route for the root path ('/')
-app.get("/", (req: Request, res: Response) => {
+app.get("/", async (req: Request, res: Response) => {
   // Send a response to the client
   RedisClient.set("get", "Hello, TypeScript + Node.js + Express!");
+
+  await mongoClient.connect();
+  const db = mongoClient.db("admin");
+  console.log("db", db);
+  const coll = db.collection("test");
+  console.log("collection", coll);
+  const result = await coll.insertOne({ value: "hello mongodb" });
+  console.log("result", result);
   res.send("Hello, TypeScript + Node.js + Express!");
 });
 
