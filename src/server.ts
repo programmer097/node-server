@@ -3,8 +3,9 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route";
 
-import "./db";
-import "./postgresdb";
+import "./database/db";
+import "./database/postgresdb";
+import "./database/redis";
 
 dotenv.config();
 
