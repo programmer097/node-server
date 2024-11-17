@@ -1,11 +1,21 @@
 import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth.route";
+
 import "./db";
 import "./postgresdb";
+
+dotenv.config();
 
 // Create an Express application
 const app = express();
 
-const port: number = 3000;
+// Middleware
+app.use(bodyParser.json());
+
+// Routes
+app.use("/auth", authRoutes);
 
 // Define a route for the root path ('/')
 app.get("/", (req: Request, res: Response) => {
@@ -13,8 +23,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Node.js + Express!");
 });
 
+const PORT = process.env.PORT || 3000;
+
 // Start the server and listen on the specified port
-app.listen(port, () => {
+app.listen(PORT, () => {
   // Log a message when the server is successfully running
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
