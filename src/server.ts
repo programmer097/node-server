@@ -1,14 +1,14 @@
-// Import the 'express' module
-import express from "express";
+import express, { Request, Response } from "express";
+import "./db";
+import "./postgresdb";
 
 // Create an Express application
 const app = express();
 
-// Set the port number for the server
-const port = 3000;
+const port: number = 3000;
 
 // Define a route for the root path ('/')
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   // Send a response to the client
   res.send("Hello, TypeScript + Node.js + Express!");
 });
