@@ -6,8 +6,8 @@ import authRoutes from "./routes/auth.route";
 dotenv.config();
 
 const { mongoClient } = require("./database/mongodb");
-const PostresClient = require("./database/postgresdb");
-const RedisClient = require("./database/redis");
+const { postgresClient } = require("./database/postgresdb");
+const { redisClient } = require("./database/redis");
 
 // Create an Express application
 const app = express();
@@ -20,17 +20,38 @@ app.use("/auth", authRoutes);
 
 // Define a route for the root path ('/')
 app.get("/", async (req: Request, res: Response) => {
-  // Send a response to the client
-  RedisClient.set("get", "Hello, TypeScript + Node.js + Express!");
+  res.send("Hello, TypeScript + Node.js + Express!");
+});
 
+app.get("/redis", async (req: Request, res: Response) => {
+  // Send a response to the client
+  redisClient.set("get", "Hello, TypeScript + Node.js + Express!");
+
+  res.send("Hello, Redis!");
+});
+
+app.get("/mongo", async (req: Request, res: Response) => {
   await mongoClient.connect();
   const db = mongoClient.db("admin");
-  console.log("db", db);
   const coll = db.collection("test");
-  console.log("collection", coll);
   const result = await coll.insertOne({ value: "hello mongodb" });
   console.log("result", result);
-  res.send("Hello, TypeScript + Node.js + Express!");
+
+  res.send("Hello, MongoDB!");
+});
+
+// Define a route for the root path ('/')
+app.get("/postgres", async (req: Request, res: Response) => {
+  // Perform queries (example)
+  try {
+    // Perform queries (example)
+    const result2 = await postgresClient.query("SELECT NOW() AS current_time");
+    console.log("Current Time:", result2.rows[0]);
+  } catch (error) {
+    console.error("Error connecting to PostgreSQL:", error);
+  }
+
+  res.send("Hello, Postgres!");
 });
 
 const PORT = process.env.PORT || 3000;

@@ -16,4 +16,10 @@ async function run() {
 
 run().catch(console.dir);
 
+process.on("SIGINT", async () => {
+  console.log("Closing PostgreSQL pool...");
+  await mongoClient.close();
+  process.exit(0);
+});
+
 module.exports = { mongoClient };

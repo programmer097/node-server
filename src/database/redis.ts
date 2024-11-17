@@ -1,31 +1,31 @@
 import { createClient, RedisClientType } from "redis";
 
 // Create a Redis client
-const client = createClient({
+const redisClient = createClient({
   url: `${process.env.REDIS_URL}:${process.env.REDIS_PORT}`, // Corrected the typo here
 });
 
-client.on("connect", () => {
+redisClient.on("connect", () => {
   console.log("Connected to Redis");
-  client.set("set", "connected");
+  redisClient.set("set", "connected");
 });
 
-client.on("error", (err) => {
+redisClient.on("error", (err) => {
   console.error("Error connecting to Redis:", err);
 });
 
-client.on("end", () => {
+redisClient.on("end", () => {
   console.log("Redis client disconnected");
 });
 
 // Gracefully shut down the Redis client when the app shuts down
 process.on("SIGINT", async () => {
-  await client.quit(); // Properly close the Redis connection
+  await redisClient.quit(); // Properly close the Redis connection
   console.log("Redis client closed");
   process.exit();
 });
 
 // Connect the client
-client.connect();
+redisClient.connect();
 
-module.exports = client;
+module.exports = { redisClient };
