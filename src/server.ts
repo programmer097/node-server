@@ -11,6 +11,7 @@ dotenv.config();
 const { redisClient } = require("./database/redis");
 import passport from "./middleware/passport";
 import passportRoutes from "./routes/passport.route";
+import passportJwtRoutes from "./routes/passport-jwt.route";
 
 // Create an Express application
 const app = express();
@@ -27,6 +28,7 @@ app.use(passport.session());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/passport", passportRoutes);
+app.use("/passport-jwt", passportJwtRoutes);
 
 // Define a route for the root path ('/')
 app.get("/", async (req: Request, res: Response) => {
