@@ -13,7 +13,7 @@ router.get("/profile", authenticateToken, (req: Request, res: Response) => {
   res.json({ message: `Welcome ${user.username}!` });
 });
 
-// Register route
+// Register new credential
 router.post("/register", async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
