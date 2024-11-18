@@ -1,25 +1,20 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 const uri = `${process.env.MONGODB_URL}:${process.env.MONGODB_PORT}`;
-const mongoClient = new MongoClient(uri);
 
 async function run() {
   try {
-    await mongoClient.connect();
+    await mongoose.connect(uri);
     console.log("Connected successfully to MongoDB!!");
   } catch (err: any) {
     console.error(err.stack);
-  } finally {
-    await mongoClient.close();
   }
 }
 
 run().catch(console.dir);
 
 process.on("SIGINT", async () => {
-  console.log("Closing MongoDB connection..");
-  await mongoClient.close();
+  console.log("Closing MongoDb connection...");
+  await mongoose.connection.close();
   process.exit(0);
 });
-
-export default mongoClient;
