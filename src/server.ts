@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import cors from "cors";
 import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
 import taskRoutes from "./routes/task.route";
@@ -13,8 +14,8 @@ dotenv.config();
 require("./database/mongoose");
 // Create an Express application
 const app = express();
-
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
