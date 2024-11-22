@@ -1,0 +1,38 @@
+version: '1.0'
+services:
+  # Reverse proxy server
+  proxy:
+    image: proxy-server
+    container_name: proxy4
+    ports:
+      - "4000:4000"
+    environment:
+      - FWD_URL=http://app:3000
+    depends_on:
+      - app
+
+  #Node server
+  app:
+    build: .
+    container_name: backend-app
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - MONGODB_PORT=27017
+      - JWT_SECRET=12345678
+    depends_on:
+      - mongo
+
+  #MongoDb service
+  mongo:
+    image: mongo:latest
+    container_name: mongodb2
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data: 
+    driver: local
